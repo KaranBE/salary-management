@@ -724,3 +724,37 @@
     opacity: 1;
   }
 }
+
+/* Utility/Modal Text styles replacing inline CSS */
+.dangerTitle {
+  color: var(--danger) !important;
+}
+
+.modalText {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.modalTextSub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.modalTextSpacing {
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.tableEmptyCell {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+.assessmentDate {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+

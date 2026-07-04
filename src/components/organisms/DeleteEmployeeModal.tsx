@@ -22,16 +22,16 @@ export function DeleteEmployeeModal({
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <h3 style={{ color: 'var(--danger)' }}>Terminate Employee</h3>
+          <h3 className={styles.dangerTitle}>Terminate Employee</h3>
           <button type="button" className={styles.closeButton} onClick={onClose}>
             <X size={20} />
           </button>
         </div>
         <div className={styles.modalBody}>
-          <p style={{ fontSize: '14px', lineHeight: '1.5' }}>
+          <p className={styles.modalText}>
             Are you sure you want to terminate the employment of <strong>{deletingEmployee.firstName} {deletingEmployee.lastName}</strong>?
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '8px', lineHeight: '1.5' }}>
+          <p className={styles.modalTextSub}>
             This will remove the employee record permanently from active payroll. This action cannot be undone.
           </p>
         </div>

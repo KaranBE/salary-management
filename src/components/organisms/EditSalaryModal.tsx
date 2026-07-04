@@ -42,7 +42,7 @@ export function EditSalaryModal({
         </div>
         <form onSubmit={onSubmit}>
           <div className={styles.modalBody}>
-            <div style={{ marginBottom: '16px', fontSize: '14px' }}>
+            <div className={styles.modalTextSpacing}>
               Adjust compensation for <strong>{editingEmployee.firstName} {editingEmployee.lastName}</strong> ({editingEmployee.jobTitle}).
             </div>
 

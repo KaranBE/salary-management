@@ -71,7 +71,7 @@ export function DirectoryView({
               <tbody>
                 {employees.length === 0 ? (
                   <tr>
-                    <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+                    <td colSpan={6} className={styles.tableEmptyCell}>
                       No employees match current search criteria.
                     </td>
                   </tr>
@@ -103,7 +103,7 @@ export function DirectoryView({
                         )}
                       </td>
                       <td>
-                        <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        <span className={styles.assessmentDate}>
                           {new Date(employee.salaryUpdatedAt).toLocaleDateString(undefined, {
                             year: 'numeric',
                             month: 'short',
