@@ -546,7 +546,7 @@ export default function Home() {
                           <YAxis stroke="#9ca3af" tick={{ fill: '#9ca3af', fontSize: 11 }} tickFormatter={(v) => `$${v/1000}k`} />
                           <Tooltip 
                             contentStyle={{ backgroundColor: '#111827', borderColor: 'rgba(255, 255, 255, 0.08)' }} 
-                            formatter={(v: number) => [formatUSD(v), 'Average Salary']}
+                            formatter={(v: any) => [formatUSD(Number(v) || 0), 'Average Salary']}
                           />
                           <Bar dataKey="averageSalaryUSD" fill="url(#primaryGrad)" radius={[4, 4, 0, 0]} name="Avg Salary" />
                           <defs>
@@ -577,7 +577,7 @@ export default function Home() {
                           <YAxis stroke="#9ca3af" tick={{ fill: '#9ca3af', fontSize: 11 }} tickFormatter={(v) => `$${v/1000}k`} />
                           <Tooltip 
                             contentStyle={{ backgroundColor: '#111827', borderColor: 'rgba(255, 255, 255, 0.08)' }}
-                            formatter={(v: number) => [formatUSD(v), '']}
+                            formatter={(v: any) => [formatUSD(Number(v) || 0), '']}
                           />
                           <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                           <Bar dataKey="maleAvgUSD" fill="#3b82f6" name="Male Avg" radius={[3, 3, 0, 0]} />
