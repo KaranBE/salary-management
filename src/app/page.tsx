@@ -164,15 +164,19 @@ export default function Home() {
     }
   }, [filterCountry, filterDept]);
 
-  // Fetch Employee Directory
-  const fetchEmployees = useCallback(async () => {
+  // Fetch Employee Directory — searchQuery is passed as a parameter to avoid
+  // including it in the dependency array, which would cause the main useEffect
+  // (that fires on tab/filter/page changes) to also re-fire on every keystroke,
+  // creating a double-fetch. The debounced effect below is the sole owner of
+  // search-triggered fetches.
+  const fetchEmployees = useCallback(async (search: string = searchQuery) => {
     try {
       setDirectoryLoading(true);
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: limit.toString()
       });
-      if (searchQuery) params.append('search', searchQuery);
+      if (search) params.append('search', search);
       if (filterCountry) params.append('country', filterCountry);
       if (filterDept) params.append('department', filterDept);
 
@@ -187,9 +191,12 @@ export default function Home() {
     } finally {
       setDirectoryLoading(false);
     }
-  }, [currentPage, searchQuery, filterCountry, filterDept]);
+  // searchQuery intentionally omitted — search changes are handled by the
+  // debounced effect below to prevent double-fetch on every keystroke.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, filterCountry, filterDept]);
 
-  // Trigger loads on filter changes
+  // Trigger loads when tab, filter, or page changes
   useEffect(() => {
     if (activeTab === 'dashboard') {
       fetchDashboard();
@@ -198,17 +205,17 @@ export default function Home() {
     }
   }, [activeTab, fetchDashboard, fetchEmployees]);
 
-  // Debounced search trigger (resets page to 1)
+  // Debounced search — sole trigger for search-driven fetches.
+  // Resets to page 1 and passes the latest query value directly to avoid
+  // the stale-closure race that would occur if we relied on the state value.
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      if (activeTab === 'directory') {
-        setCurrentPage(1);
-        fetchEmployees();
-      }
+    if (activeTab !== 'directory') return;
+    const timer = setTimeout(() => {
+      setCurrentPage(1);
+      fetchEmployees(searchQuery);
     }, 400);
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchQuery]);
+    return () => clearTimeout(timer);
+  }, [searchQuery, activeTab]);
 
   // Currency format helpers
   const formatLocalSalary = (value: number, currency: string) => {
@@ -232,6 +239,14 @@ export default function Home() {
       currency: 'USD',
       maximumFractionDigits: 0
     }).format(value);
+  };
+
+  // Compact formatter for KPI cards: $8,234,567 → $8.2M
+  const formatCompact = (value: number) => {
+    if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(1)}B`;
+    if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
+    if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}K`;
+    return formatUSD(value);
   };
 
   // Add Employee Handler
@@ -503,7 +518,12 @@ export default function Home() {
                     <span className={styles.kpiTitle}>Total Payroll (USD)</span>
                     <div className={styles.kpiIcon}><DollarSign size={16} /></div>
                   </div>
-                  <h2 className={styles.kpiValue}>{formatUSD(dashboardData?.totals.totalPayrollUSD || 0)}</h2>
+                  <h2
+                    className={styles.kpiValue}
+                    title={formatUSD(dashboardData?.totals.totalPayrollUSD || 0)}
+                  >
+                    {formatCompact(dashboardData?.totals.totalPayrollUSD || 0)}
+                  </h2>
                   <span className={styles.kpiSubtext}>Annualized total payroll cost</span>
                 </div>
 
@@ -512,7 +532,12 @@ export default function Home() {
                     <span className={styles.kpiTitle}>Average Salary (USD)</span>
                     <div className={styles.kpiIcon}><TrendingUp size={16} /></div>
                   </div>
-                  <h2 className={styles.kpiValue}>{formatUSD(dashboardData?.totals.averageSalaryUSD || 0)}</h2>
+                  <h2
+                    className={styles.kpiValue}
+                    title={formatUSD(dashboardData?.totals.averageSalaryUSD || 0)}
+                  >
+                    {formatCompact(dashboardData?.totals.averageSalaryUSD || 0)}
+                  </h2>
                   <span className={styles.kpiSubtext}>Mean compensation cost</span>
                 </div>
 
@@ -521,7 +546,12 @@ export default function Home() {
                     <span className={styles.kpiTitle}>Median Salary (USD)</span>
                     <div className={styles.kpiIcon}><Percent size={16} /></div>
                   </div>
-                  <h2 className={styles.kpiValue}>{formatUSD(dashboardData?.totals.medianSalaryUSD || 0)}</h2>
+                  <h2
+                    className={styles.kpiValue}
+                    title={formatUSD(dashboardData?.totals.medianSalaryUSD || 0)}
+                  >
+                    {formatCompact(dashboardData?.totals.medianSalaryUSD || 0)}
+                  </h2>
                   <span className={styles.kpiSubtext}>Mid-point compensation cost</span>
                 </div>
               </div>

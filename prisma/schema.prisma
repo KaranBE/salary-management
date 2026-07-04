@@ -24,6 +24,10 @@ model Employee {
   salaryUpdatedAt DateTime @default(now())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  @@index([department])
+  @@index([country])
+  @@index([department, country])
 }
 
 model ExchangeRate {
