@@ -1,0 +1,9 @@
+- `[x]` Initialize Git and Next.js workspace
+- `[x]` Setup Prisma Schema and SQLite DB
+- `[x]` Write and run data seed script (10,000 employees)
+- `[x]` Build API Route Handlers (CRUD & Dashboard Metrics)
+- `[x]` Create Styling Foundations (Vanilla CSS/CSS Modules)
+- `[x]` Build Frontend Components (Table, Dashboard Charts, Forms/Modals)
+- `[x]` Write Unit and Integration Tests (Vitest)
+- `[x]` Verify Performance and Correctness
+- `[x]` Create Walkthrough documentation
